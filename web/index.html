@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="stylesheet" href="style/bootstrap.min.css" media="screen">
+  <link rel="stylesheet" href="style/slider.css"/>
+  <link rel="stylesheet" href="style/leaflet.css"/>
+  <link rel="stylesheet" href="style/main.css"/>
+
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div id="mainContainer" class="container-fluid">
+
+  <div id="mainRow" class="row-fluid">
+    <div id="map" class="col-md-9 main-map"></div>
+    <div class="col-md-3 tool-menu">
+      <div class="panel panel-primary tool-menu-panel">
+        <div class="panel-heading">
+          <h3 class="panel-title">Panel title</h3>
+        </div>
+        <div class="panel-body">
+          <div id="dropZone" class="well well-lg drop-zone">Drop Files Here</div>
+          <form role="form">
+            <div class="form-group">
+              <label for="bufferSlider">Buffer Slider</label>
+              <input id="bufferSlider" type="text" class="slider form-control" style="">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Email address</label>
+              <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox"> Check me out
+              </label>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script src="js/jquery-2.1.0.min.js"></script>
+<script src="js/leaflet.js"></script>
+<script src="js/jquery.parse.min.js"></script>
+<script src="js/javascript.util.js"></script>
+<script src="js/jsts.js"></script>
+<script src="js/attache.array.min.js"></script>
+<script src="js/bootstrap-slider.js"></script>
+<script src="json/bartstations.geojson.js"></script>
+<script src="json/casualcarpoolpickups.geojson.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

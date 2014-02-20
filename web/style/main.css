@@ -1,0 +1,35 @@
+html, body,#mainRow,#mainContainer {
+   height: 100%;
+   margin: 0px;
+  padding: 0px;
+}
+
+.main-map{
+  height:100%;
+}
+
+.tool-menu{
+  padding-left: 1px;
+  padding-right: 1px;
+  height: 100%;
+}
+
+.tool-menu-panel{
+  height: 100%;
+}
+
+.drop-zone
+{
+	font-weight: bold;
+	text-align: center;
+	color: #555;
+	border: 3px dashed #555;
+	border-radius: 7px;
+	cursor: default;
+}
+
+.drop-zone-hover
+{
+	border-color: #38dcff;
+  border-width: 4px;
+}
