@@ -3,39 +3,47 @@ var bufferLayer;
 $(document).ready(function () {
     initDropZone();
     initSlider();
+    initBufferToggles();
 
-  var config = {
-      tileUrl : 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
-      tileAttrib : '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-      initLatLng : new L.LatLng(37.8044,-122.2708),
-      initZoom : 11,
-      minZoom : 1,
-      maxZoom : 17
-  };
+    //Map Configs
+    var config = {
+        tileUrl: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+        tileAttrib: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+        initLatLng: new L.LatLng(37.8044, -122.2708),
+        initZoom: 11,
+        minZoom: 1,
+        maxZoom: 17
+    };
 
-  map = L.map('map', {minZoom: config.minZoom, maxZoom: config.maxZoom});
-
-  bufferLayer = addBufferLayer(bartStations,1.0);
-  map.addLayer(new L.TileLayer(config.tileUrl, {attribution: config.tileAttrib}));
-
+    //BART Icon
     var bartIcon = L.icon({
         iconUrl: 'images/bart.png',
         iconSize: [40, 32],
         iconAnchor: [20, 16]
     })
 
+    //Casual Carpool Icon
     var pinIcon = L.icon({
         iconUrl: 'images/marker-icon.png'
     });
 
-    //Bart Stations
+    //Init Map
+    map = L.map('map', {minZoom: config.minZoom, maxZoom: config.maxZoom});
+
+    //Add Base Map
+    map.addLayer(new L.TileLayer(config.tileUrl, {attribution: config.tileAttrib}));
+
+    //Add Default Buffers Around BART Stations
+    addBufferLayer([bartStations], 1.0);
+
+    //Add Bart Stations
     L.geoJson([bartStations], {
         pointToLayer: function (feature, latlng) {
             return L.marker(latlng, {icon: bartIcon});
         }
     }).addTo(map);
 
-    //Casual Carpool Pickups
+    //Add Casual Carpool Pickups
     L.geoJson([casualCarpoolLocations], {
         pointToLayer: function (feature, latlng) {
             return L.marker(latlng, {icon: pinIcon});
@@ -44,34 +52,85 @@ $(document).ready(function () {
 
     map.setView(config.initLatLng, config.initZoom);
 
-  });
+});
 
-function addBufferLayer(geoJSON,radius){
-    if(bufferLayer) bufferLayer.clearLayers();
-    var dd = (1609.34 * radius)/((Math.PI/180) * 6378137);
+/**
+ * Takes an array of geojson points and a radius in miles.  Buffers
+ * of radius in miles are added around the points and unioned to
+ * create a multi-polygon which is added to the map.
+ * @param Array of geoJSON
+ * @param radius
+ */
+function addBufferLayer(geoJSON, radius) {
+    if (bufferLayer) bufferLayer.clearLayers();
+    var dd = (1609.34 * radius) / ((Math.PI / 180) * 6378137);
     var reader = new jsts.io.GeoJSONReader();
     var writer = new jsts.io.GeoJSONWriter();
-    var geom = reader.read(geoJSON);
-
-    //CascadedPolygonUnion
-     var polys = [];
-     for(var i = 0; i <  geom.features.length; i++){
-         polys.push(geom.features[i].geometry.buffer(dd,5));
-     }
-     var union = new jsts.operation.union.CascadedPolygonUnion(polys).union();
-     return L.geoJson(writer.write(union)).addTo(map);
+    var geoms = [];
+    for (var i = 0; i < geoJSON.length; i++) {
+        geoms.push(reader.read(geoJSON[i]));
+    }
+    var polys = [];
+    for (var j = 0; j < geoms.length; j++) {
+        for (var i = 0; i < geoms[j].features.length; i++) {
+            polys.push( geoms[j].features[i].geometry.buffer(dd, 5));
+        }
+    }
+    var union = new jsts.operation.union.CascadedPolygonUnion(polys).union();
+    bufferLayer = L.geoJson(writer.write(union)).addTo(map);
 }
 
+function initBufferToggles(){
+    $('#bartChkBx,#casCarChkBx').change(function(e){
+        var bufLayers = getBufferLayers();
+        //if both false turn off layer and disable slider
+        if(bufLayers.length == 0){
+            if(bufferLayer) bufferLayer.clearLayers();
+            //$('#bufferSlider').data('slider').picker.off();
+            return;
+        }
+        //$('#bufferSlider').data('slider').picker.on();
+        var bufDist = $('#bufferSlider').data('slider').getValue();
+        addBufferLayer(bufLayers,bufDist);
+    });
+}
+
+/**
+ * Returns geojson representations of the point layers to buffer
+ * based on the buffer check boxes.
+ * @returns {Array}
+ */
+function getBufferLayers(){
+    var bufToggles = $('#bartChkBx,#casCarChkBx');
+    var bufLayers = [];
+    if(bufToggles[0].checked) bufLayers.push(bartStations);
+    if(bufToggles[1].checked) bufLayers.push(casualCarpoolLocations);
+    return bufLayers;
+}
+
+/**
+ * Initializes the buffer radius slider and assigns event handlers.
+ */
 function initSlider(){
     $('#bufferSlider').slider({
         min:.1,
         max: 5.0,
         step:.1,
-        value: 1.0
+        value: 1.0,
+        formater: function (val){return val.toFixed(2);}
     }).on('slideStop',function (evt){
-            bufferLayer = addBufferLayer(bartStations,evt.value);
+            var bufLayers = getBufferLayers();
+            if(bufLayers.length == 0) return;
+            addBufferLayer(bufLayers,evt.value);
+        }).on('slide',function(evt){
+            $('#bufDistLbl').html(evt.value.toFixed(2));
         });
 }
+
+/**
+ * Initializes the drop area where you can drag and drop a CSV of
+ * locations (e.g. Redfin exports)
+ */
  function initDropZone(){
     var dz = $("#dropZone");
     dz.on('dragenter',function (e){
@@ -113,7 +172,10 @@ function initSlider(){
       });
  }
 
-
+/**
+ * Adds parsed CSV points (JSON) to the map if lat long is present
+ * @param parseResult
+ */
 function addToMap(parseResult){
     var rows = parseResult.results.rows;
     var circle;
