@@ -178,8 +178,6 @@ function initSlider(){
  */
 function addToMap(parseResult){
     var rows = parseResult.results.rows;
-   // var circle;
-   //Casual Carpool Icon
     var houseIcon = L.icon({
         iconUrl: 'images/pin-house.png',
         iconSize: [20, 50]
@@ -188,12 +186,6 @@ function addToMap(parseResult){
         if(rows[i].LONGITUDE && rows[i].LATITUDE){
             L.marker([Number(rows[i].LATITUDE),Number(rows[i].LONGITUDE)], {icon: houseIcon}).addTo(map).
                 bindPopup(rows[i].ADDRESS + ' - ' + rows[i]["LIST PRICE"]);
-
-/*            circle = L.circle([Number(rows[i].LATITUDE),Number(rows[i].LONGITUDE)],50, {
-                color: 'red',
-                fillColor: '#f03',
-                fillOpacity: 0.5
-            }).addTo(map).bindPopup(rows[i].ADDRESS + ' - ' + rows[i]["LIST PRICE"]);*/
         }
 
     }
