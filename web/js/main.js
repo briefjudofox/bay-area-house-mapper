@@ -17,14 +17,14 @@ $(document).ready(function () {
 
     //BART Icon
     var bartIcon = L.icon({
-        iconUrl: 'images/bart.png',
-        iconSize: [40, 32],
-        iconAnchor: [20, 16]
+        iconUrl: 'images/pin-bart.png',
+        iconSize: [20, 50]
     })
 
     //Casual Carpool Icon
-    var pinIcon = L.icon({
-        iconUrl: 'images/marker-icon.png'
+    var carIcon = L.icon({
+        iconUrl: 'images/pin-car.png',
+        iconSize: [20, 50]
     });
 
     //Init Map
@@ -46,7 +46,7 @@ $(document).ready(function () {
     //Add Casual Carpool Pickups
     L.geoJson([casualCarpoolLocations], {
         pointToLayer: function (feature, latlng) {
-            return L.marker(latlng, {icon: pinIcon});
+            return L.marker(latlng, {icon: carIcon});
         }
     }).addTo(map);
 
@@ -178,15 +178,22 @@ function initSlider(){
  */
 function addToMap(parseResult){
     var rows = parseResult.results.rows;
-    var circle;
+   // var circle;
+   //Casual Carpool Icon
+    var houseIcon = L.icon({
+        iconUrl: 'images/pin-house.png',
+        iconSize: [20, 50]
+    });
     for(var i = 0; i < rows.length; i++){
         if(rows[i].LONGITUDE && rows[i].LATITUDE){
-            //console.log(rows[i]);
-            circle = L.circle([Number(rows[i].LATITUDE),Number(rows[i].LONGITUDE)],50, {
+            L.marker([Number(rows[i].LATITUDE),Number(rows[i].LONGITUDE)], {icon: houseIcon}).addTo(map).
+                bindPopup(rows[i].ADDRESS + ' - ' + rows[i]["LIST PRICE"]);
+
+/*            circle = L.circle([Number(rows[i].LATITUDE),Number(rows[i].LONGITUDE)],50, {
                 color: 'red',
                 fillColor: '#f03',
                 fillOpacity: 0.5
-            }).addTo(map).bindPopup(rows[i].ADDRESS + ' - ' + rows[i]["LIST PRICE"]);
+            }).addTo(map).bindPopup(rows[i].ADDRESS + ' - ' + rows[i]["LIST PRICE"]);*/
         }
 
     }
