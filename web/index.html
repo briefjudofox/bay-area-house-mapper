@@ -26,11 +26,12 @@
     <div class="col-md-3 tool-menu">
       <div class="panel panel-primary tool-menu-panel">
         <div class="panel-heading">
-          <h3 class="panel-title">Panel title</h3>
+          <h3 class="panel-title">Bay Area House Mapper</h3>
         </div>
         <div class="panel-body">
           <div id="dropZone" class="well well-lg drop-zone">Drop Files Here</div>
           <form role="form">
+            <!--Buffer Panel -->
             <div class="panel panel-default">
               <div class="panel-heading">
                 <h3 class="panel-title">Distance Buffers</h3>
@@ -52,6 +53,29 @@
                 </div>
               </div>
             </div>
+            <!--Layer Panel -->
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">Map Layers</h3>
+              </div>
+              <div class="panel-body">
+
+                <div class="form-group">
+                  <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-primary active map-icon-tooltip map-layer-toggle" title="BART Stations">
+                      <input type="checkbox" checked="checked" value="bartStations"><div class="map-icon-toggle" ><img src="images/pin-bart.png"></div>
+                    </label>
+                    <label class="btn btn-primary active map-icon-tooltip map-layer-toggle" title="Casual Carpool Pick-Ups">
+                      <input type="checkbox" checked="checked" value="casualCarpools"><div class="map-icon-toggle"><img src="images/pin-car.png"></div>
+                    </label>
+                    <label id="houseLrTog" class="btn btn-primary map-icon-tooltip map-layer-toggle" title="Houses">
+                      <input type="checkbox" value="houses"><div class="map-icon-toggle"><img src="images/pin-house.png"></div>
+                    </label>
+                  </div>
+                </div>
+
+              </div>
+            </div>
           </form>
         </div>
       </div>
@@ -67,6 +91,7 @@
 <script src="js/javascript.util.js"></script>
 <script src="js/jsts.js"></script>
 <script src="js/attache.array.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
 <script src="js/bootstrap-slider.js"></script>
 <script src="json/bartstations.geojson.js"></script>
 <script src="json/casualcarpoolpickups.geojson.js"></script>

@@ -1,9 +1,14 @@
 var map;
 var bufferLayer;
+var overlays = {};
 $(document).ready(function () {
     initDropZone();
     initSlider();
     initBufferToggles();
+    initLayerToggles();
+
+    //Init tooltips on layer controls
+    $('.map-icon-tooltip').tooltip({container: 'body'});
 
     //Map Configs
     var config = {
@@ -37,14 +42,14 @@ $(document).ready(function () {
     addBufferLayer([bartStations], 1.0);
 
     //Add Bart Stations
-    L.geoJson([bartStations], {
+    overlays.bartStations = L.geoJson([bartStations], {
         pointToLayer: function (feature, latlng) {
             return L.marker(latlng, {icon: bartIcon});
         }
     }).addTo(map);
 
     //Add Casual Carpool Pickups
-    L.geoJson([casualCarpoolLocations], {
+    overlays.casualCarpools = L.geoJson([casualCarpoolLocations], {
         pointToLayer: function (feature, latlng) {
             return L.marker(latlng, {icon: carIcon});
         }
@@ -78,6 +83,14 @@ function addBufferLayer(geoJSON, radius) {
     }
     var union = new jsts.operation.union.CascadedPolygonUnion(polys).union();
     bufferLayer = L.geoJson(writer.write(union)).addTo(map);
+}
+
+function initLayerToggles(){
+    $('.map-layer-toggle :checkbox').change(function(e){
+       if(!overlays.hasOwnProperty(e.currentTarget.value)) return;
+       if(e.currentTarget.checked) map.addLayer(overlays[e.currentTarget.value]);
+       else map.removeLayer(overlays[e.currentTarget.value]);
+    });
 }
 
 function initBufferToggles(){
@@ -182,11 +195,14 @@ function addToMap(parseResult){
         iconUrl: 'images/pin-house.png',
         iconSize: [20, 50]
     });
+    var houses = L.layerGroup();
     for(var i = 0; i < rows.length; i++){
         if(rows[i].LONGITUDE && rows[i].LATITUDE){
-            L.marker([Number(rows[i].LATITUDE),Number(rows[i].LONGITUDE)], {icon: houseIcon}).addTo(map).
-                bindPopup(rows[i].ADDRESS + ' - ' + rows[i]["LIST PRICE"]);
+            houses.addLayer(L.marker([Number(rows[i].LATITUDE),Number(rows[i].LONGITUDE)], {icon: houseIcon}).
+                bindPopup(rows[i].ADDRESS + ' - ' + rows[i]["LIST PRICE"]));
         }
-
     }
+    $('.map-layer-toggle :checkbox[value=houses]').prop( "checked", true );
+    $('#houseLrTog').toggleClass( 'active', true );
+    overlays.houses = houses.addTo(map);
 }
