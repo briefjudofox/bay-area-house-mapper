@@ -22,9 +22,6 @@ html, body,#mainRow,#mainContainer {
 }
 
 
-/*.map-icon-toggle:hover {background-image: url("../img/glyphicons-halflings-blue.png");}
-.map-icon-toggle {background-position: -408px -96px;}*/
-
 .tool-menu{
   padding-left: 1px;
   padding-right: 1px;
@@ -33,6 +30,8 @@ html, body,#mainRow,#mainContainer {
 
 .tool-menu-panel{
   height: 100%;
+  margin-bottom: 0px;
+
 }
 
 form .form-group {
