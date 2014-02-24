@@ -6,6 +6,7 @@ $(document).ready(function () {
     initSlider();
     initBufferToggles();
     initLayerToggles();
+    initGeocodeInput();
 
     //Init tooltips on layer controls
     $('.map-icon-tooltip').tooltip({container: 'body'});
@@ -120,6 +121,59 @@ function getBufferLayers(){
     if(bufToggles[1].checked) bufLayers.push(casualCarpoolLocations);
     return bufLayers;
 }
+
+/**
+ * Initializes auto-complete functionality for the geocode input using
+ * esri's suggest api and geocode api and adds event handler to button
+ * in the event that there are no suggestions
+ */
+function initGeocodeInput() {
+
+    $('#geocodeBtn').on('click', function (e) {
+      geocode($("#geocodeInput").val(),null);
+    });
+
+    var suggestions = {};
+    $('#geocodeInput').typeahead({
+        source: function (query, cb) {
+            $.get('http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest',
+                {text: query, f: 'json', location: '-122.2708,37.8044', distance: 48000},
+                function (data) {
+                    var results = [];
+                    suggestions = {};
+                    $.each(data.suggestions, function (i, loc) {
+                        results.push(loc.text);
+                        suggestions[loc.text] = loc.magicKey;
+                    });
+                    cb(results);
+                }, 'json');
+        },
+        updater: function (item) {
+            $('#geocodeInput').attr('placeholder', item);
+            geocode(item,suggestions[item]);
+        }
+    });
+}
+
+
+function geocode(text, magicKey){
+    $.get('http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/find',
+        {text: text, f: 'json', magicKey: magicKey?magicKey:''},
+        function (data) {
+            if (data.locations && data.locations.length > 0) {
+                var locIcon = L.icon({
+                    iconUrl: 'images/pin-location-m.png',
+                    iconSize: [30, 70]
+                })
+                var loc = data.locations[0];
+                L.marker([loc.feature.geometry.y, loc.feature.geometry.x], {icon: locIcon}).
+                    bindPopup(loc.name).addTo(map);
+                map.setView([loc.feature.geometry.y, loc.feature.geometry.x], 14);
+            }
+        },
+        'json');
+}
+
 
 /**
  * Initializes the buffer radius slider and assigns event handlers.

@@ -31,6 +31,22 @@
         <div class="panel-body">
           <div id="dropZone" class="well well-lg drop-zone">Drop Files Here</div>
           <form role="form">
+            <!--Geocode Panel -->
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">Locate an Address</h3>
+              </div>
+              <div class="panel-body">
+                <div class="input-group">
+                  <input id="geocodeInput" type="text" class="form-control" autocomplete="off">
+              <span class="input-group-btn">
+                <button id="geocodeBtn" class="btn btn-default" type="button">
+                  <span class="glyphicon glyphicon-search"></span>
+                </button>
+              </span>
+                </div>
+              </div>
+            </div>
             <!--Buffer Panel -->
             <div class="panel panel-default">
               <div class="panel-heading">
@@ -93,6 +109,7 @@
 <script src="js/attache.array.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/bootstrap-slider.js"></script>
+<script src="js/bootstrap3-typeahead.min.js"></script>
 <script src="json/bartstations.geojson.js"></script>
 <script src="json/casualcarpoolpickups.geojson.js"></script>
 <script src="js/main.js"></script>
