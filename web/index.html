@@ -67,6 +67,11 @@
                     <input type="checkbox" id="casCarChkBx" value="casCarPts"> Include Casual Carpool Pick-Ups
                   </label>
                 </div>
+                <div class="form-group">
+                  <label class="checkbox-inline">
+                    <input type="checkbox" id="tranBayChkBx" value="tranBayPts"> Include TransBay Stops
+                  </label>
+                </div>
               </div>
             </div>
             <!--Layer Panel -->
@@ -86,6 +91,9 @@
                     </label>
                     <label id="houseLrTog" class="btn btn-primary map-icon-tooltip map-layer-toggle" title="Houses">
                       <input type="checkbox" value="houses"><div class="map-icon-toggle"><img src="images/pin-house.png"></div>
+                    </label>
+                    <label id="transBayLrTog" class="btn btn-primary map-icon-tooltip map-layer-toggle" title="TransBay Bus Route Stops">
+                      <input type="checkbox" value="transBayStations"><div class="map-icon-toggle"><img src="images/pin-bus.png"></div>
                     </label>
                   </div>
                 </div>
@@ -112,6 +120,7 @@
 <script src="js/bootstrap3-typeahead.min.js"></script>
 <script src="json/bartstations.geojson.js"></script>
 <script src="json/casualcarpoolpickups.geojson.js"></script>
+<script src="json/transbaystops.geojson.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

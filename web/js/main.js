@@ -33,6 +33,12 @@ $(document).ready(function () {
         iconSize: [20, 50]
     });
 
+    //Bus Icon
+    var busIcon = L.icon({
+        iconUrl: 'images/pin-bus.png',
+        iconSize: [20, 50]
+    });
+
     //Init Map
     map = L.map('map', {minZoom: config.minZoom, maxZoom: config.maxZoom});
 
@@ -55,6 +61,13 @@ $(document).ready(function () {
             return L.marker(latlng, {icon: carIcon});
         }
     }).addTo(map);
+
+    //Add TransBay Route Stations
+    overlays.transBayStations = L.geoJson([transBayStations], {
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, {icon: busIcon});
+        }
+    });
 
     map.setView(config.initLatLng, config.initZoom);
 
@@ -95,7 +108,7 @@ function initLayerToggles(){
 }
 
 function initBufferToggles(){
-    $('#bartChkBx,#casCarChkBx').change(function(e){
+    $('#bartChkBx,#casCarChkBx,#tranBayChkBx').change(function(e){
         var bufLayers = getBufferLayers();
         //if both false turn off layer and disable slider
         if(bufLayers.length == 0){
@@ -115,10 +128,11 @@ function initBufferToggles(){
  * @returns {Array}
  */
 function getBufferLayers(){
-    var bufToggles = $('#bartChkBx,#casCarChkBx');
+    var bufToggles = $('#bartChkBx,#casCarChkBx,#tranBayChkBx');
     var bufLayers = [];
     if(bufToggles[0].checked) bufLayers.push(bartStations);
     if(bufToggles[1].checked) bufLayers.push(casualCarpoolLocations);
+    if(bufToggles[2].checked) bufLayers.push(transBayStations);
     return bufLayers;
 }
 
