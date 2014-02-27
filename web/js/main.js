@@ -56,7 +56,7 @@ $(document).ready(function () {
     }).addTo(map);
 
     //Add Casual Carpool Pickups
-    overlays.casualCarpools = L.geoJson([casualCarpoolLocations], {
+    overlays.casualCarpoolLocations = L.geoJson([casualCarpoolLocations], {
         pointToLayer: function (feature, latlng) {
             return L.marker(latlng, {icon: carIcon});
         }
@@ -100,7 +100,7 @@ function addBufferLayer(geoJSON, radius) {
 }
 
 function initLayerToggles(){
-    $('.map-layer-toggle :checkbox').change(function(e){
+    $('.map-point-layer-toggle :checkbox').change(function(e){
        if(!overlays.hasOwnProperty(e.currentTarget.value)) return;
        if(e.currentTarget.checked) map.addLayer(overlays[e.currentTarget.value]);
        else map.removeLayer(overlays[e.currentTarget.value]);
@@ -108,15 +108,13 @@ function initLayerToggles(){
 }
 
 function initBufferToggles(){
-    $('#bartChkBx,#casCarChkBx,#tranBayChkBx').change(function(e){
+    $('.map-buffer-toggle :checkbox').change(function(e){
         var bufLayers = getBufferLayers();
         //if both false turn off layer and disable slider
         if(bufLayers.length == 0){
             if(bufferLayer) bufferLayer.clearLayers();
-            //$('#bufferSlider').data('slider').picker.off();
             return;
         }
-        //$('#bufferSlider').data('slider').picker.on();
         var bufDist = $('#bufferSlider').data('slider').getValue();
         addBufferLayer(bufLayers,bufDist);
     });
@@ -128,11 +126,11 @@ function initBufferToggles(){
  * @returns {Array}
  */
 function getBufferLayers(){
-    var bufToggles = $('#bartChkBx,#casCarChkBx,#tranBayChkBx');
+    var bufToggles = $('.map-buffer-toggle :checkbox');
     var bufLayers = [];
-    if(bufToggles[0].checked) bufLayers.push(bartStations);
-    if(bufToggles[1].checked) bufLayers.push(casualCarpoolLocations);
-    if(bufToggles[2].checked) bufLayers.push(transBayStations);
+    for(var i = 0; i < bufToggles.length; i++){
+        if(bufToggles[i].checked) bufLayers.push(window[bufToggles[i].value]);
+    }
     return bufLayers;
 }
 

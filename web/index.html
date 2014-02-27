@@ -29,7 +29,9 @@
           <h3 class="panel-title">Bay Area House Mapper</h3>
         </div>
         <div class="panel-body">
-          <div id="dropZone" class="well well-lg drop-zone">Drop Files Here</div>
+          <div id="dropZone" class="well well-lg drop-zone">
+            <h4>Drop Files Here<br><small>(e.g. Redfin CSV Exports)</small></h4>
+          </div>
           <form role="form">
             <!--Geocode Panel -->
             <div class="panel panel-default">
@@ -58,19 +60,17 @@
                   <input id="bufferSlider" type="text" class="slider">
                 </div>
                 <div class="form-group">
-                  <label class="checkbox-inline">
-                    <input type="checkbox" id="bartChkBx" value="bartPts" checked="true"> Include BART Stations
-                  </label>
-                </div>
-                <div class="form-group">
-                  <label class="checkbox-inline">
-                    <input type="checkbox" id="casCarChkBx" value="casCarPts"> Include Casual Carpool Pick-Ups
-                  </label>
-                </div>
-                <div class="form-group">
-                  <label class="checkbox-inline">
-                    <input type="checkbox" id="tranBayChkBx" value="tranBayPts"> Include TransBay Stops
-                  </label>
+                  <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-primary active map-icon-tooltip map-layer-toggle map-buffer-toggle" title="BART Stations">
+                      <input  type="checkbox" checked="checked" value="bartStations"><div class="map-icon-toggle" ><img src="images/pin-bart.png"></div>
+                    </label>
+                    <label class="btn btn-primary map-icon-tooltip map-layer-toggle map-buffer-toggle" title="Casual Carpool Pick-Ups">
+                      <input  type="checkbox" value="casualCarpoolLocations"><div class="map-icon-toggle"><img src="images/pin-car.png"></div>
+                    </label>
+                    <label class="btn btn-primary map-icon-tooltip map-layer-toggle map-buffer-toggle" title="TransBay Bus Route Stops">
+                      <input   type="checkbox" value="transBayStations"><div class="map-icon-toggle"><img src="images/pin-bus.png"></div>
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
@@ -83,16 +83,16 @@
 
                 <div class="form-group">
                   <div class="btn-group" data-toggle="buttons">
-                    <label class="btn btn-primary active map-icon-tooltip map-layer-toggle" title="BART Stations">
+                    <label class="btn btn-primary active map-icon-tooltip map-layer-toggle map-point-layer-toggle" title="BART Stations">
                       <input type="checkbox" checked="checked" value="bartStations"><div class="map-icon-toggle" ><img src="images/pin-bart.png"></div>
                     </label>
-                    <label class="btn btn-primary active map-icon-tooltip map-layer-toggle" title="Casual Carpool Pick-Ups">
-                      <input type="checkbox" checked="checked" value="casualCarpools"><div class="map-icon-toggle"><img src="images/pin-car.png"></div>
+                    <label class="btn btn-primary active map-icon-tooltip map-layer-toggle map-point-layer-toggle" title="Casual Carpool Pick-Ups">
+                      <input type="checkbox" checked="checked" value="casualCarpoolLocations"><div class="map-icon-toggle"><img src="images/pin-car.png"></div>
                     </label>
-                    <label id="houseLrTog" class="btn btn-primary map-icon-tooltip map-layer-toggle" title="Houses">
+                    <label id="houseLrTog" class="btn btn-primary map-icon-tooltip map-layer-toggle map-point-layer-toggle" title="Houses">
                       <input type="checkbox" value="houses"><div class="map-icon-toggle"><img src="images/pin-house.png"></div>
                     </label>
-                    <label id="transBayLrTog" class="btn btn-primary map-icon-tooltip map-layer-toggle" title="TransBay Bus Route Stops">
+                    <label id="transBayLrTog" class="btn btn-primary map-icon-tooltip map-layer-toggle map-point-layer-toggle" title="TransBay Bus Route Stops">
                       <input type="checkbox" value="transBayStations"><div class="map-icon-toggle"><img src="images/pin-bus.png"></div>
                     </label>
                   </div>
