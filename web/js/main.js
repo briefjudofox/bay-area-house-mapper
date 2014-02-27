@@ -171,7 +171,7 @@ function initOverlays(){
     });
 
     //Ferry Icon
-    var busIcon = L.icon({
+    var ferryIcon = L.icon({
         iconUrl: 'images/pin-ferry.png',
         iconSize: [20, 50]
     });
@@ -200,7 +200,7 @@ function initOverlays(){
     //Add Ferry Stations
     overlays.ferryStations = L.geoJson([ferryStations], {
         pointToLayer: function (feature, latlng) {
-            return L.marker(latlng, {icon: busIcon});
+            return L.marker(latlng, {icon: ferryIcon});
         }
     });
 }
