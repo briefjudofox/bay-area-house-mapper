@@ -21,53 +21,17 @@ $(document).ready(function () {
         maxZoom: 17
     };
 
-    //BART Icon
-    var bartIcon = L.icon({
-        iconUrl: 'images/pin-bart.png',
-        iconSize: [20, 50]
-    })
-
-    //Casual Carpool Icon
-    var carIcon = L.icon({
-        iconUrl: 'images/pin-car.png',
-        iconSize: [20, 50]
-    });
-
-    //Bus Icon
-    var busIcon = L.icon({
-        iconUrl: 'images/pin-bus.png',
-        iconSize: [20, 50]
-    });
-
     //Init Map
     map = L.map('map', {minZoom: config.minZoom, maxZoom: config.maxZoom});
 
     //Add Base Map
     map.addLayer(new L.TileLayer(config.tileUrl, {attribution: config.tileAttrib}));
 
+    //Add Point Layers
+    initOverlays();
+
     //Add Default Buffers Around BART Stations
     addBufferLayer([bartStations], 1.0);
-
-    //Add Bart Stations
-    overlays.bartStations = L.geoJson([bartStations], {
-        pointToLayer: function (feature, latlng) {
-            return L.marker(latlng, {icon: bartIcon});
-        }
-    }).addTo(map);
-
-    //Add Casual Carpool Pickups
-    overlays.casualCarpoolLocations = L.geoJson([casualCarpoolLocations], {
-        pointToLayer: function (feature, latlng) {
-            return L.marker(latlng, {icon: carIcon});
-        }
-    }).addTo(map);
-
-    //Add TransBay Route Stations
-    overlays.transBayStations = L.geoJson([transBayStations], {
-        pointToLayer: function (feature, latlng) {
-            return L.marker(latlng, {icon: busIcon});
-        }
-    });
 
     map.setView(config.initLatLng, config.initZoom);
 
@@ -187,6 +151,59 @@ function geocode(text, magicKey){
 }
 
 
+function initOverlays(){
+    //BART Icon
+    var bartIcon = L.icon({
+        iconUrl: 'images/pin-bart.png',
+        iconSize: [20, 50]
+    })
+
+    //Casual Carpool Icon
+    var carIcon = L.icon({
+        iconUrl: 'images/pin-car.png',
+        iconSize: [20, 50]
+    });
+
+    //Bus Icon
+    var busIcon = L.icon({
+        iconUrl: 'images/pin-bus.png',
+        iconSize: [20, 50]
+    });
+
+    //Ferry Icon
+    var busIcon = L.icon({
+        iconUrl: 'images/pin-ferry.png',
+        iconSize: [20, 50]
+    });
+
+    //Add Bart Stations
+    overlays.bartStations = L.geoJson([bartStations], {
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, {icon: bartIcon});
+        }
+    }).addTo(map);
+
+    //Add Casual Carpool Pickups
+    overlays.casualCarpoolLocations = L.geoJson([casualCarpoolLocations], {
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, {icon: carIcon});
+        }
+    }).addTo(map);
+
+    //Add TransBay Route Stations
+    overlays.transBayStations = L.geoJson([transBayStations], {
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, {icon: busIcon});
+        }
+    });
+
+    //Add Ferry Stations
+    overlays.ferryStations = L.geoJson([ferryStations], {
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, {icon: busIcon});
+        }
+    });
+}
 /**
  * Initializes the buffer radius slider and assigns event handlers.
  */
